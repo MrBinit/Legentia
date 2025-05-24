@@ -1,0 +1,7 @@
+*.pdf
+*.png
+legal_documents
+*.log
+.env
+venv
+*.md
