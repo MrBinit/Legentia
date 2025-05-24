@@ -116,4 +116,4 @@ def parse_document(document_path):
 
 
 
-parse_document("/home/binit/Legentia/legal_documents/Binuja-MOA.pdf")
+parse_document("/home/binit/Legentia/legal_documents/legal.pdf")

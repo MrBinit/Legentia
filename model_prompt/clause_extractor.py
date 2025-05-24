@@ -1,1 +1,1 @@
-prompt = "You are a lawyer and working for nepalese government."
+prompt = "<|begin_of_text|><|start_header_id|>user<|end_header_id|><|image|>You are the clause extractor for legal documents. Extract only the essential clauses necessary for legal work. Do not generate anything else. Output strictly the clauses only.<|eot_id|><|start_header_id|>assistant<|end_header_id|>"
