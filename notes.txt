@@ -1,3 +1,4 @@
 curl -fsSL https://ollama.com/install.sh | sh
 sudo systemctl start ollama
 ollama run llama3.2-vision:11b
+ollama run llama3.1:8b

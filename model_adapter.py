@@ -3,7 +3,11 @@ from autogen_ext.models.semantic_kernel import SKChatCompletionAdapter
 from semantic_kernel import Kernel
 from semantic_kernel.connectors.ai.ollama import OllamaChatCompletion, OllamaChatPromptExecutionSettings
 from semantic_kernel.memory.null_memory import NullMemory
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 async def get_model_client():
     """This is the model from ollama which would be use in a agent."""
