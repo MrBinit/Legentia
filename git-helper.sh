@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Ask which branch to work on
-read -p "Which branch do you want to push to? (development/main): " branch
+read -p "Which branch do you want to push to? (dev/main): " branch
 
 # Save current branch
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
-if [ "$branch" == "development" ]; then
+if [ "$branch" == "dev" ]; then
     # Ask for commit message only for development
     read -p "Enter commit message: " commit_message
 

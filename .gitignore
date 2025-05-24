@@ -5,3 +5,4 @@ legal_documents
 .env
 venv
 *.md
+__pycache__
