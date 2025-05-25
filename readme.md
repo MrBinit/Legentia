@@ -7,7 +7,7 @@ This project is a multi-agent system for reviewing legal documents, designed to 
 
 ## 🧠 System Overview
 
-![View system architecture on Lucid](https://lucid.app/lucidspark/c305f23c-2acb-4af9-8963-0ad24a47b59a/thumbnail.png)
+![system architecture](https://lucid.app/lucidspark/c305f23c-2acb-4af9-8963-0ad24a47b59a/edit?viewport_loc=-1716%2C-635%2C4917%2C2495%2C0_0&invitationId=inv_32b04533-212c-4093-97b9-a35464053331)
 
 
 ## 🚀 Features
