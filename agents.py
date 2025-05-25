@@ -9,10 +9,8 @@ from model_prompt.prompt_agents import (
 )
 from markdown_loader import task
 from autogen_core.tools import FunctionTool
-
-# Risky terms to trigger the risk agent
-RISK_KEYWORDS = ["termination", "penalty", "indemnify", "liability", "compensation", "damages"]
-
+from legal_risky_keywords import RISK_KEYWORDS
+from translation_model.pipeline import run_translation_pipeline
 
 async def main():
     model_client = await get_model_client()
@@ -36,14 +34,14 @@ async def main():
     )
 
     translate_tool = FunctionTool(
-        translate_to_nepali,
+        run_translation_pipeline,
         description="Translate English legal text to Nepali while preserving formal tone."
     )
     translation_agent = AssistantAgent(
         name= "TranslationAgent",
         model_client=model_client,
+        tools=[translate_tool],
         system_message=prompt_TranslationAgent,
-
 
     )
 
@@ -67,6 +65,8 @@ async def main():
     summary_result = await summarizer_agent.run(task=summary_input)
     summary_text = summary_result.messages[-1].content
     print("\n--- Summary ---\n", summary_text)
+
+
 
 
 if __name__ == "__main__":

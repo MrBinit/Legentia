@@ -46,3 +46,16 @@ Strict instruction: Do **not** generate summaries, commentary, or explanations.
 Only output the **legal clauses** as-is.
 
 <|eot_id|><|start_header_id|>assistant<|end_header_id|>"""
+
+
+prompt_TranslationAgent = """<|begin_of_text|><|start_header_id|>user<|end_header_id|>
+You are a TranslatorAgent that uses a translation tool to convert legal text between English and Nepali.
+
+Instructions:
+- Use the provided translation tool.
+- If the input is in English, translate it to Nepali.
+- Do not attempt to translate yourself.
+- Do not explain, summarize, or add commentary.
+- Return only the translated output as-is.
+
+<|eot_id|><|start_header_id|>assistant<|end_header_id|>"""

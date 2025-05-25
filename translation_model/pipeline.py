@@ -66,8 +66,7 @@ def _postprocess_text(processed: dict, translated: list[str], tgt_lang: str) -> 
 def run_translation_pipeline(
     text: str,
     src_lang: str,
-    tgt_lang: str,
-    context: str) -> str:
+    tgt_lang: str) -> str:
     """
     Executes the full translation pipeline:
     1. Checks if result exists
@@ -76,6 +75,7 @@ def run_translation_pipeline(
     4. Postprocesses
     5. Saves to CSV + JSON
     """
+    context = "answer"
     try:
         logger.info("Starting translation for: %s", text)
         cached = check_existing_translation(tgt_lang, text, context)
@@ -104,8 +104,3 @@ def run_translation_pipeline(
         raise RuntimeError("Translation pipeline failed.") from e
 
 
-
-text= "My name is Binit"
-src_lang = "eng_Latn"
-tgt_lang = "npi_Deva"
-run_translation_pipeline(text, src_lang, tgt_lang, context= 'answer')
