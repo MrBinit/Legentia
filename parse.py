@@ -24,13 +24,6 @@ logging.basicConfig(
     ]
 )
 
-# class parse_document:
-
-
-#     def __init__(self):
-
-#         pass
-
 
 def get_next_filename(dir_path, base_name):
     """Find next available file name like base_name_1.md, base_name_2.md, etc."""
@@ -49,7 +42,7 @@ def get_next_filename(dir_path, base_name):
 
     return dir_path / f"{base_name}_{max_index + 1}.md"
 
-def pdf_parse(document_path):
+def pdf_parse(document_path: str) -> None:
     """ This function parses the pdf."""
     try:
         md_text = pymupdf4llm.to_markdown(document_path, ignore_images=True)
