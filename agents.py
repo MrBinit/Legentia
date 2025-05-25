@@ -7,15 +7,17 @@ from model_prompt.prompt_agents import (
     prompt_SummarizerAgent,
     prompt_TranslationAgent,
 )
-from markdown_loader import (clause_extraction_task,
+from markdown_loader import (get_clause_extraction_task,
                             get_risk_analysis_task,
                             get_summary_task,)
 from autogen_core.tools import FunctionTool
 from legal_risky_keywords import RISK_KEYWORDS
 from translation_model.pipeline import run_translation_pipeline
+from parse import parse_document
 
+async def process_legal_document(document_path: str, language= "english"):
+    normalized_text = parse_document(document_path)
 
-async def main():
     model_client = await get_model_client()
 
     clause_extractor = AssistantAgent(
@@ -35,11 +37,6 @@ async def main():
         model_client=model_client,
         system_message=prompt_SummarizerAgent,
     )
-
-    translate_tool = FunctionTool(
-        run_translation_pipeline,
-        description="Translate English legal text to Nepali while preserving formal tone."
-    )
     translation_agent = AssistantAgent(
         name= "TranslationAgent",
         model_client=model_client,
@@ -48,8 +45,9 @@ async def main():
     )
 
     # Run ClauseExtractor
-    clause_result = await clause_extractor.run(task=clause_extraction_task)
-    clause_text = clause_result.messages[-1].content
+    clause_task_input = get_clause_extraction_task(normalized_text)
+    clause_extraction_result = await clause_extractor.run(task=clause_task_input)
+    clause_text = clause_extraction_result.messages[-1].content
 
     #Check for risky terms
     risky = any(term.lower() in clause_text.lower() for term in RISK_KEYWORDS)
@@ -69,16 +67,17 @@ async def main():
     summary_text = summary_result.messages[-1].content
 
 
-    # #Run translation for nepali.
-    language = "english"
+    #Run translation for nepali.
     if language.lower() == "nepali":
         print("\n--- Translating Summary to Nepali ---\n")
         translation_result = await translation_agent.run(task=summary_text)
         translated_summary = translation_result.messages[-1].content
-        print("\n--- Translated Summary (Nepali) ---\n", translated_summary)
+        # print("\n--- Translated Summary (Nepali) ---\n", translated_summary)
+        return translated_summary
     else:
-        print("\n--- Final Summary (English) ---\n", summary_text)
+        # print("\n--- Final Summary (English) ---\n", summary_text)
+        return summary_text
 
 
-if __name__ == "__main__":
-    asyncio.run(main())
+# if __name__ == "__main__":
+#     asyncio.run(process_legal_document("/home/binit/Legentia/legal_documents/legal.pdf", language="nepali"))

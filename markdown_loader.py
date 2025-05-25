@@ -4,9 +4,8 @@ def load_markdown(path: str) -> str:
     with open(path, "r", encoding="utf-8") as f:
         return f.read()
 
-markdown_doc = load_markdown("/home/binit/Legentia/legal_document_parsed/pdf_document/pdf_output_1.md")
-
-clause_extraction_task = f"""
+def get_clause_extraction_task(document_text: str) -> str:
+    return f"""
 You are a legal clause extractor.
 
 Your job is to extract the following essential clauses from the legal document.
@@ -32,7 +31,7 @@ Clauses to extract:
 - Signatures and execution
 
 Document:
-{markdown_doc}
+{document_text}
 """
 
 def get_risk_analysis_task(extracted_clauses: str) -> str:
