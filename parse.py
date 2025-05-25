@@ -1,10 +1,12 @@
 import os
+import re
 import pymupdf4llm
 import pathlib
 from docx import Document
 import ollama
 import logging
 from dotenv import load_dotenv
+from translation_model.pipeline import run_translation_pipeline
 
 load_dotenv()
 
@@ -24,6 +26,9 @@ logging.basicConfig(
     ]
 )
 
+def contains_nepali(text: str) -> bool:
+    """Detect Devanagari (Nepali) characters."""
+    return bool(re.search(r'[\u0900-\u097F]', text))
 
 def get_next_filename(dir_path, base_name):
     """Find next available file name like base_name_1.md, base_name_2.md, etc."""
@@ -92,21 +97,28 @@ def image_parse(document_path):
         raise
 
 
-def parse_document(document_path):
-    """This parses documents of any extension"""
+def parse_document(document_path: str) -> str:
+    """Parse document (any format) → English text (auto-translated if needed)"""
     extension = pathlib.Path(document_path).suffix.lower()
     logging.info(f"Received file with extension: {extension}")
 
     if extension == ".pdf":
-        return pdf_parse(document_path)
+        text = pdf_parse(document_path)
     elif extension in ['.doc', '.docx']:
-        return docx_parse(document_path)
+        text = docx_parse(document_path)
     elif extension in ['.jpg', '.jpeg', '.png', '.bmp', '.tiff']:
-        return image_parse(document_path)
+        text = image_parse(document_path)
     else:
         logging.error(f"Unsupported file format: {extension}")
         raise ValueError(f"Unsupported file format: {extension}")
 
+    if contains_nepali(text):
+        logging.info("Detected Nepali text. Translating to English...")
+        text = run_translation_pipeline(
+            text,
+            src_lang="npi_Deva",
+            tgt_lang="eng_Latn",
+        )
 
+    return text
 
-parse_document("/home/binit/Legentia/legal_documents/legal.pdf")

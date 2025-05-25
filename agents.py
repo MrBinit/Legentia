@@ -7,10 +7,13 @@ from model_prompt.prompt_agents import (
     prompt_SummarizerAgent,
     prompt_TranslationAgent,
 )
-from markdown_loader import task
+from markdown_loader import (clause_extraction_task,
+                            get_risk_analysis_task,
+                            get_summary_task,)
 from autogen_core.tools import FunctionTool
 from legal_risky_keywords import RISK_KEYWORDS
 from translation_model.pipeline import run_translation_pipeline
+
 
 async def main():
     model_client = await get_model_client()
@@ -42,11 +45,10 @@ async def main():
         model_client=model_client,
         system_message=prompt_TranslationAgent,
 
-
     )
 
     # Run ClauseExtractor
-    clause_result = await clause_extractor.run(task=task)
+    clause_result = await clause_extractor.run(task=clause_extraction_task)
     clause_text = clause_result.messages[-1].content
 
     #Check for risky terms
@@ -54,15 +56,16 @@ async def main():
 
     #If risky → run RiskAnalysisAgent
     if risky:
-        risk_result = await risk_analysis.run(task=clause_text)
+        risk_task = get_risk_analysis_task(clause_text)
+        risk_result = await risk_analysis.run(task=risk_task)
         risk_text = risk_result.messages[-1].content
         print("\n--- Risk Analysis ---\n", risk_text)
     else:
         risk_text = ""
 
     # Run SummarizerAgent
-    summary_input = clause_text + "\n" + risk_text
-    summary_result = await summarizer_agent.run(task=summary_input)
+    summary_task = get_summary_task(clause_text + "\n" + risk_text)
+    summary_result = await summarizer_agent.run(task=summary_task)
     summary_text = summary_result.messages[-1].content
 
 

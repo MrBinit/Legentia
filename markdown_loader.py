@@ -1,14 +1,18 @@
+# markdown_loader.py
+
 def load_markdown(path: str) -> str:
     with open(path, "r", encoding="utf-8") as f:
         return f.read()
 
-
 markdown_doc = load_markdown("/home/binit/Legentia/legal_document_parsed/pdf_document/pdf_output_1.md")
 
-task = f"""
-You are a legal clause extractor. Your job is to extract the following essential clauses from the given legal document. Return only the text of each clause exactly as it appears in the document. Do not summarize or add commentary.
+clause_extraction_task = f"""
+You are a legal clause extractor.
 
-Extract the following clauses from this contract:
+Your job is to extract the following essential clauses from the legal document.
+Return only the exact text of each clause — no summaries, interpretations, or commentary.
+
+Clauses to extract:
 - Parties involved
 - Effective date and term
 - Purpose / Scope
@@ -27,9 +31,34 @@ Extract the following clauses from this contract:
 - Notices
 - Signatures and execution
 
-After extraction, check the clauses for any of the following high-risk legal terms: "termination", "penalty", "indemnify", "liability", "compensation", "damages".
-If such terms are found, **trigger the RiskAnalysisAgent** to perform a risk assessment based on those clauses.
-
 Document:
 {markdown_doc}
+"""
+
+def get_risk_analysis_task(extracted_clauses: str) -> str:
+    return f"""
+You are a legal risk analysis agent.
+
+Analyze the following legal clauses and identify potential risks based on dangerous or vague terms such as:
+- Termination
+- Penalty
+- Indemnify
+- Liability
+- Compensation
+- Damages
+
+Return your analysis in short bullet points.
+
+Clauses:
+{extracted_clauses}
+"""
+
+def get_summary_task(content: str) -> str:
+    return f"""
+You are a legal summarizer.
+
+Summarize the following legal clauses and risk notes in simple, plain English for a non-lawyer audience. Avoid legal jargon.
+
+Content:
+{content}
 """
