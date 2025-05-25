@@ -1,8 +1,8 @@
 """This module handles the translation pipeline, including preprocessing, translation, and postprocessing."""
 import re
 import logging
-from translator import TranslatorModel
-from file_ops import save_to_csv, check_existing_translation, save_debug_json
+from translation_model.translator import TranslatorModel
+from translation_model.file_ops import save_to_csv, check_existing_translation, save_debug_json
 
 
 logger = logging.getLogger(__name__)

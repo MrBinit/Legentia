@@ -6,8 +6,8 @@ import logging
 import torch
 import ctranslate2
 import transformers
-from mapping_dictionary import nepali_to_english_dict, english_to_nepali_dict
-from romanized_to_nepali import nepali_to_romanized_dict
+from translation_model.mapping_dictionary import nepali_to_english_dict, english_to_nepali_dict
+from translation_model.romanized_to_nepali import nepali_to_romanized_dict
 from symspellpy.symspellpy import SymSpell, Verbosity
 from dotenv import load_dotenv
 

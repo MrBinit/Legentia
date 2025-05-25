@@ -40,8 +40,8 @@ async def main():
     translation_agent = AssistantAgent(
         name= "TranslationAgent",
         model_client=model_client,
-        tools=[translate_tool],
         system_message=prompt_TranslationAgent,
+
 
     )
 
@@ -64,9 +64,17 @@ async def main():
     summary_input = clause_text + "\n" + risk_text
     summary_result = await summarizer_agent.run(task=summary_input)
     summary_text = summary_result.messages[-1].content
-    print("\n--- Summary ---\n", summary_text)
 
 
+    # #Run translation for nepali.
+    language = "english"
+    if language.lower() == "nepali":
+        print("\n--- Translating Summary to Nepali ---\n")
+        translation_result = await translation_agent.run(task=summary_text)
+        translated_summary = translation_result.messages[-1].content
+        print("\n--- Translated Summary (Nepali) ---\n", translated_summary)
+    else:
+        print("\n--- Final Summary (English) ---\n", summary_text)
 
 
 if __name__ == "__main__":
