@@ -1,0 +1,18 @@
+{
+    "original_sentence": "My name is Binit",
+    "sentence_with_placeholders": "My name is Binit",
+    "placeholder_map": {},
+    "split_newlines": [
+        "My name is Binit"
+    ],
+    "split_with_symbols": [
+        "My name is Binit"
+    ],
+    "text_only": [
+        "My name is Binit"
+    ],
+    "translated_sentence": [
+        "मेरो नाम बिनित हो"
+    ],
+    "final_response_including_url": "मेरो नाम बिनित हो"
+}

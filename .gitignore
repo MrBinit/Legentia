@@ -6,3 +6,4 @@ legal_documents
 venv
 *.md
 __pycache__
+nllb-200-distilled-600M

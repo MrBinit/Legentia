@@ -4,9 +4,11 @@ from model_adapter import get_model_client
 from model_prompt.prompt_agents import (
     prompt_ClauseExtractorAgent,
     prompt_RiskAnalysisAgent,
-    prompt_SummarizerAgent
+    prompt_SummarizerAgent,
+    prompt_TranslationAgent,
 )
 from markdown_loader import task
+from autogen_core.tools import FunctionTool
 
 # Risky terms to trigger the risk agent
 RISK_KEYWORDS = ["termination", "penalty", "indemnify", "liability", "compensation", "damages"]
@@ -31,6 +33,18 @@ async def main():
         name="SummarizerAgent",
         model_client=model_client,
         system_message=prompt_SummarizerAgent,
+    )
+
+    translate_tool = FunctionTool(
+        translate_to_nepali,
+        description="Translate English legal text to Nepali while preserving formal tone."
+    )
+    translation_agent = AssistantAgent(
+        name= "TranslationAgent",
+        model_client=model_client,
+        system_message=prompt_TranslationAgent,
+
+
     )
 
     # Run ClauseExtractor
