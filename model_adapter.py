@@ -9,7 +9,18 @@ import os
 load_dotenv()
 
 async def get_model_client():
-    """This is the model from ollama which would be use in a agent."""
+    """
+    Initializes and returns an asynchronous model client for use in Autogen agents,
+    using the LLaMA 3.2 Vision 11B model served via Ollama and Semantic Kernel.
+
+    The client is wrapped in a Semantic Kernel ChatCompletionAdapter with:
+        - LLaMA3.2-vision:11b as the model backend
+        - Low temperature (0.1) for deterministic responses
+        - Null memory (no context retention across invocations)
+
+    Returns:
+        SKChatCompletionAdapter: A model client compatible with Autogen agents.
+    """
     sk_client = OllamaChatCompletion(
         ai_model_id="llama3.2-vision:11b",
     )

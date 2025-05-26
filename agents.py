@@ -15,7 +15,26 @@ from legal_risky_keywords import RISK_KEYWORDS
 from translation_model.pipeline import run_translation_pipeline
 from parse import parse_document
 
-async def process_legal_document(document_path: str, language= "english"):
+async def process_legal_document(document_path: str, language= str) -> str:
+    """
+    Processes a legal document through a multi-agent pipeline to extract clauses, analyze risks,
+    summarize the content, and optionally translate the final output based on the desired language.
+
+    Steps:
+    1. Parses the document and normalizes its text (e.g., translates Nepali to English if detected).
+    2. Extracts essential legal clauses using ClauseExtractorAgent.
+    3. Checks for risk-related keywords; if found, triggers RiskAnalysisAgent.
+    4. Summarizes the combined clause and risk content using SummarizerAgent.
+    5. If the desired output language is 'nepali', translates the summary using TranslationAgent.
+
+    Parameters:
+        document_path (str): The file path to the legal document (PDF, DOCX, image, etc.).
+        language (str): The desired output language ("english" or "nepali"). Defaults to "english".
+
+    Returns:
+        str: The final summarized content, optionally translated to Nepali.
+    """
+
     normalized_text = parse_document(document_path)
 
     model_client = await get_model_client()
@@ -72,12 +91,6 @@ async def process_legal_document(document_path: str, language= "english"):
         print("\n--- Translating Summary to Nepali ---\n")
         translation_result = await translation_agent.run(task=summary_text)
         translated_summary = translation_result.messages[-1].content
-        # print("\n--- Translated Summary (Nepali) ---\n", translated_summary)
         return translated_summary
     else:
-        # print("\n--- Final Summary (English) ---\n", summary_text)
         return summary_text
-
-
-# if __name__ == "__main__":
-#     asyncio.run(process_legal_document("/home/binit/Legentia/legal_documents/legal.pdf", language="nepali"))
