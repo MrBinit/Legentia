@@ -3,7 +3,7 @@ import asyncio
 from agents import process_legal_document
 
 # Wrapper to pass user language into agent (modification in agent.py required)
-def process_sync(document_path, user_language):
+def process_sync(document_path: str, user_language: str):
     # Validate language input
     user_language = user_language.strip().lower() if user_language else "english"
 
